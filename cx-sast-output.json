@@ -1,0 +1,86 @@
+{
+  "usrbinbrain/payment-service-xyz": {
+    "branch": "main",
+    "scan_id": "abcd1234-abcd-1234-abcd-1234abcd1234",
+    "vulnerabilities": [
+      {
+        "severity": "HIGH",
+        "status": "NEW",
+        "state": "CONFIRMED",
+        "cwe_id": 89,
+        "query": "Sql_Injection",
+        "group": "CSharp_High_Threat",
+        "language": "CSharp",
+        "description": "O parâmetro `userId` é concatenado diretamente na query SQL em `Controllers/PaymentController.cs` na linha 45, permitindo injeção de SQL.",
+        "vuln_files": [
+          {
+            "file_name": "Controllers/PaymentController.cs",
+            "file_content": "var query = \"SELECT * FROM Payments WHERE UserId = '\" + userId + \"'\";\nvar result = db.ExecuteQuery(query);",
+            "file_sha": "1111111111111111111111111111111111111111",
+            "file_size": 120
+          }
+        ]
+      },
+      {
+        "severity": "LOW",
+        "status": "NEW",
+        "state": "FALSE_POSITIVE",
+        "cwe_id": 200,
+        "query": "Information_Leak",
+        "group": "CSharp_Low_Info",
+        "language": "CSharp",
+        "description": "O uso de `ex.ToString()` em `Services/LoggingService.cs` expõe detalhes internos, mas, nesse contexto, não há risco explorável.",
+        "vuln_files": [
+          {
+            "file_name": "Services/LoggingService.cs",
+            "file_content": "catch (Exception ex) {\n    logger.LogInformation(ex.ToString());\n}",
+            "file_sha": "2222222222222222222222222222222222222222",
+            "file_size": 95
+          }
+        ]
+      }
+    ]
+  },
+  "usrbinbrain/pix-service-xyz": {
+    "branch": "develop",
+    "scan_id": "dcba4321-dcba-4321-dcba-4321dcba4321",
+    "vulnerabilities": [
+      {
+        "severity": "MEDIUM",
+        "status": "NEW",
+        "state": "TO_VERIFY",
+        "cwe_id": 352,
+        "query": "CSRF",
+        "group": "Go_Medium_Threat",
+        "language": "Go",
+        "description": "O handler `UpdateProfile` em `handlers/profile.go` não valida token CSRF, o que pode permitir requisições forjadas.",
+        "vuln_files": [
+          {
+            "file_name": "handlers/profile.go",
+            "file_content": "func UpdateProfile(w http.ResponseWriter, r *http.Request) {\n    // falta validação de CSRF\n}",
+            "file_sha": "3333333333333333333333333333333333333333",
+            "file_size": 80
+          }
+        ]
+      },
+      {
+        "severity": "MEDIUM",
+        "status": "NEW",
+        "state": "FALSE_POSITIVE",
+        "cwe_id": 346,
+        "query": "Missing_HSTS_Header",
+        "group": "Go_Medium_Threat",
+        "language": "Go",
+        "description": "Embora não haja cabeçalho HSTS, o serviço roda sempre por HTTPS via proxy reverso, tornando este alerta um falso positivo.",
+        "vuln_files": [
+          {
+            "file_name": "server/server.go",
+            "file_content": "func main() {\n    srv := &http.Server{Addr: \":8443\", Handler: nil}\n    srv.ListenAndServeTLS(\"cert.pem\", \"key.pem\")\n}",
+            "file_sha": "4444444444444444444444444444444444444444",
+            "file_size": 130
+          }
+        ]
+      }
+    ]
+  }
+}
